@@ -3,7 +3,7 @@ import random
 
 numContributors, numProjects = map(int, input("").split(" "))
 
-Skill = namedtuple("Skill", ["name", "level"])
+Skill = namedtuple("Skill", ["name", "level", "roleID"])
 Person = namedtuple("Person", ["name", "skills"])
 Project = namedtuple("Project", ["name", "days", "score", "bestBefore", "roles"])
 Assignment = namedtuple("Assignment", ["name", "assignedRoles"])
@@ -16,9 +16,10 @@ for i in range(numContributors):
 	skills = []
 	for j in range(int(numSkills)):
 		skillName, level = input("").split()
-		skills.append(Skill(skillName, int(level)))
+		skills.append(Skill(skillName, int(level), 0))
 	people.append(Person(personName, skills))
 
+roleID = 0
 for i in range(numProjects):
 	projectName, days, score, bestBefore, numRoles = input().split(" ")
 	days = int(days)
@@ -28,7 +29,8 @@ for i in range(numProjects):
 	roles = []
 	for j in range(numRoles):
 		skillName, level = input("").split()
-		roles.append(Skill(skillName, int(level)))
+		roles.append(Skill(skillName, int(level), roleID))
+		roleID += 1
 	projects.append(Project(projectName, days, score, bestBefore, roles))
 
 # Function that takes in the skills needed for a project and available people.
