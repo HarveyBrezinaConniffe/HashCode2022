@@ -1,4 +1,5 @@
 from collections import namedtuple
+import random
 
 numContributors, numProjects = map(int, input("").split(" "))
 
@@ -47,8 +48,48 @@ def findWorkableAssignment(roles, availablePeople):
 					break
 			if suitable:
 				rolesToPeople[role.name].append(person.name)
-	return rolesToPeople
+	# Check if any roles have no suitable people, If so we cannot have a valid list right now
+	for role in rolesToPeople:
+		if len(rolesToPeople[role]) == 0:
+			return -1
+	return rolesToPeople	
+
+def isUnique(currentList):
+	seenPeople = {}
+	for person in currentList:
+		if person in seenPeople:
+			return False
+		seenPeople[person] = 1
+	return True
+
+def genList(rolesToPeople):
+	output = []
+	counter = 0
+	while True:
+		if counter == 10:
+			return -1
+		for role in rolesToPeople:
+			possiblePeople = rolesToPeople[role]
+			person = random.choice(possiblePeople)
+			output.append(person)
+		counter += 1
+		if isUnique(output):
+			return output
+	return -1
+
+Assignment = namedtuple("Assignment", ["projectName", "roleNames"])
+assignments = []
 
 for project in projects:
-	print("Finding suitable people list for project {}.".format(project.name))
-	print(findWorkableAssignment(project.roles, people))
+	rolesToPeople = findWorkableAssignment(project.roles, people)
+	if rolesToPeople == -1:
+		continue
+	assignmentList = genList(findWorkableAssignment(project.roles, people))
+	if assignmentList == -1:
+		continue
+	assignments.append(Assignment(project.name, assignmentList))
+
+print(len(assignments))
+for assignment in assignments:
+	print(assignment.projectName)
+	print(" ".join(assignment.roleNames))
