@@ -37,8 +37,8 @@ def findWorkableAssignment(roles, availablePeople):
 	# Find all people that have skills at minimum level
 	rolesToPeople = {}	
 	for role in roles:
-		if role.name not in rolesToPeople:
-			rolesToPeople[role.name] = []
+		if role not in rolesToPeople:
+			rolesToPeople[role] = []
 		minLevel = role.level
 		for person in availablePeople:
 			suitable = False
@@ -47,7 +47,7 @@ def findWorkableAssignment(roles, availablePeople):
 					suitable = True
 					break
 			if suitable:
-				rolesToPeople[role.name].append(person.name)
+				rolesToPeople[role].append(person.name)
 	# Check if any roles have no suitable people, If so we cannot have a valid list right now
 	for role in rolesToPeople:
 		if len(rolesToPeople[role]) == 0:
